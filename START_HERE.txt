@@ -1,0 +1,45 @@
+GrainGuard Gateway - Local Test
+
+1. Create Firestore document:
+   probeRegistry/P01
+   {
+     "facilityId": "<existing facility document ID>",
+     "siloId": "<existing silo document ID>",
+     "enabled": true,
+     "featureSchema": 1
+   }
+
+2. Firebase Console -> Project Settings -> Service Accounts
+   Generate a new private key and save the JSON somewhere private.
+   DO NOT commit or share this JSON.
+
+3. Copy .env.example to .env and fill:
+   MQTT_HOST=aa51896c756c4ca6a2a09819362b1133.s1.eu.hivemq.cloud
+   MQTT_PORT=8883
+   MQTT_USERNAME=<gateway MQTT username, or current dev credential>
+   MQTT_PASSWORD=<MQTT password>
+   MQTT_CLIENT_ID=grainguard-gateway-01
+   GOOGLE_APPLICATION_CREDENTIALS=C:/full/path/to/service-account.json
+   FIREBASE_PROJECT_ID=<your Firebase project ID>
+
+4. In this folder run:
+   npm install
+   npm run typecheck
+   npm run dev
+
+5. Expected:
+   MQTT connected
+   Subscribed to GrainGuard probe topics
+
+6. Reset/power-cycle the probe.
+
+7. Expected gateway log:
+   Acoustic created: P01-...
+
+8. Expected probe Serial:
+   Gateway ACK received.
+
+9. Firestore should contain:
+   facilities/<facilityId>/acousticInbox/<scanId>
+
+At that point ESP -> HiveMQ -> Gateway -> Firestore is proven.

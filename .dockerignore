@@ -1,0 +1,13 @@
+node_modules
+dist
+.env
+.env.*
+!.env.example
+.git
+.gitignore
+*.log
+*.json.bak
+
+service-account.json
+*service-account*.json
+*firebase-adminsdk*.json
