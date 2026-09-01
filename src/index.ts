@@ -1,7 +1,26 @@
+import { createServer } from "node:http";
 import { connect, type MqttClient } from "mqtt";
 import { config } from "./config";
 import { AcousticSchema, StatusSchema, TelemetrySchema } from "./schemas";
 import { handleAcoustic, handleStatus, handleTelemetry } from "./handlers";
+
+const healthServer = createServer((req, res) => {
+  if (req.url === "/health") {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({
+      status: "ok",
+      service: "grainguard-gateway"
+    }));
+    return;
+  }
+
+  res.writeHead(404);
+  res.end();
+});
+
+healthServer.listen(config.PORT, "0.0.0.0", () => {
+  console.log(`Health server listening on port ${config.PORT}`);
+});
 
 const ROOT = "grainguard/probes";
 const TELEMETRY_FILTER = `${ROOT}/+/telemetry`;
